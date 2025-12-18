@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-app = Flask(__terabox__)
+app = Flask(__name__) # <---
 
 USERS = {
     "admin": "androsgil527@gmail.com",
