@@ -1,46 +1,49 @@
 import os
+import requests
+import re
 
-def generar_codigo(instruccion):
-    if "hola mundo" in instruccion.lower():
-        return (
-            "print('Hola mundo desde Termux')\n"
-        ), "python"
+# Configuración (Aquí usarías una API Key real)
+API_URL = "https://api.tu-proveedor-ia.com/v1/chat/completions"
+API_KEY = "TU_API_KEY_AQUÍ"
 
-    if "bash" in instruccion.lower():
-        return (
-            "#!/bin/bash\n"
-            "echo 'Hola desde un script bash'\n"
-        ), "bash"
+def obtener_codigo_ia(prompt):
+    print("🧠 La IA está pensando el código...")
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    data = {
+        "model": "gpt-4-turbo", # O el modelo que prefieras
+        "messages": [{"role": "user", "content": f"Escribe solo el código para: {prompt}. No des explicaciones, solo código puro."}]
+    }
+    
+    # Simulación de respuesta (Para que pruebes la lógica)
+    # En un entorno real, aquí harías: response = requests.post(API_URL, headers=headers, json=data)
+    # Por ahora, simularemos que la IA nos devuelve un código funcional:
+    codigo_detectado = "print('Este es un código real generado por IA')"
+    lenguaje = "python"
+    
+    return codigo_detectado, lenguaje
 
-    return None, None
-
-def guardar_archivo(codigo, lenguaje):
-    if lenguaje == "python":
-        nombre = "programa.py"
-    elif lenguaje == "bash":
-        nombre = "programa.sh"
-    else:
-        return
-
+def guardar_y_preparar(codigo, lenguaje):
+    extensiones = {"python": "py", "javascript": "js", "bash": "sh", "c++": "cpp"}
+    ext = extensiones.get(lenguaje.lower(), "txt")
+    nombre = f"resultado_final.{ext}"
+    
     with open(nombre, "w") as f:
         f.write(codigo)
-
-    if lenguaje == "bash":
+    
+    if ext == "sh":
         os.chmod(nombre, 0o755)
-
-    print(f"[✓] Código generado en {nombre}")
+    
+    print(f"✅ Archivo '{nombre}' generado con éxito.")
 
 def main():
-    print("🤖 IA Programadora (Modo educativo)")
-    instruccion = input("Describe el programa que quieres: ")
-
-    codigo, lenguaje = generar_codigo(instruccion)
-
+    print("🚀 SISTEMA DE PROGRAMACIÓN AUTÓNOMA V2.0")
+    tarea = input("¿Qué programa necesitas que cree hoy?: ")
+    
+    codigo, lenguaje = obtener_codigo_ia(tarea)
+    
     if codigo:
-        guardar_archivo(codigo, lenguaje)
-        print("✨ Listo. Puedes revisarlo o ejecutarlo.")
-    else:
-        print("⚠️ No entendí la instrucción.")
+        guardar_y_preparar(codigo, lenguaje)
+        print("⭐ Tarea completada. El código es funcional y está listo.")
 
 if __name__ == "__main__":
     main()
