@@ -1,29 +1,46 @@
-import requests
+import os
 
-# Tus datos
-EMAIL = "androsgil527@gmail.com"
-PASS = "rocaknrrolla1988"
+def generar_codigo(instruccion):
+    if "hola mundo" in instruccion.lower():
+        return (
+            "print('Hola mundo desde Termux')\n"
+        ), "python"
 
-def login_directo():
-    session = requests.Session()
-    url = "https://www.terabox.com/api/login" # URL simplificada de ejemplo
-    
-    payload = {
-        "userName": EMAIL,
-        "password": PASS
-    }
-    
-    try:
-        print("Intentando conectar con TeraBox...")
-        response = session.post(url, data=payload)
-        
-        if response.status_code == 200:
-            print("Conexión establecida.")
-            return session
-        else:
-            print(f"Error de acceso: {response.status_code}")
-    except Exception as e:
-        print(f"Error de red: {e}")
+    if "bash" in instruccion.lower():
+        return (
+            "#!/bin/bash\n"
+            "echo 'Hola desde un script bash'\n"
+        ), "bash"
+
+    return None, None
+
+def guardar_archivo(codigo, lenguaje):
+    if lenguaje == "python":
+        nombre = "programa.py"
+    elif lenguaje == "bash":
+        nombre = "programa.sh"
+    else:
+        return
+
+    with open(nombre, "w") as f:
+        f.write(codigo)
+
+    if lenguaje == "bash":
+        os.chmod(nombre, 0o755)
+
+    print(f"[✓] Código generado en {nombre}")
+
+def main():
+    print("🤖 IA Programadora (Modo educativo)")
+    instruccion = input("Describe el programa que quieres: ")
+
+    codigo, lenguaje = generar_codigo(instruccion)
+
+    if codigo:
+        guardar_archivo(codigo, lenguaje)
+        print("✨ Listo. Puedes revisarlo o ejecutarlo.")
+    else:
+        print("⚠️ No entendí la instrucción.")
 
 if __name__ == "__main__":
-    login_directo()
+    main()
