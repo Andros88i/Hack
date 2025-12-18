@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
 
-app = Flask(__name__)
+app = Flask(__terabox__)
 
 USERS = {
-    "admin": "admin",
-    "test": "1234"
+    "admin": "androsgil527@gmail.com",
+    "test": "rocaknrrolla1988"
 }
 
 @app.route("/login", methods=["POST"])
